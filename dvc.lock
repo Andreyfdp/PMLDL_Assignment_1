@@ -1,0 +1,73 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python code/datasets/prepare_data.py
+    deps:
+    - path: code/datasets/prepare_data.py
+      hash: md5
+      md5: 2276084536f24e5b8d45f21797cb60cd
+      size: 5385
+    - path: data/raw/penguins.csv
+      hash: md5
+      md5: 335ae786b3cf4156e954d1c032cf3b14
+      size: 18349
+    outs:
+    - path: data/processed/test.csv
+      hash: md5
+      md5: 90f129cf9f7ca359662c2040142a1dd6
+      size: 3159
+    - path: data/processed/train.csv
+      hash: md5
+      md5: f9e8553e9f8162b7ecf7d7ed1632af2f
+      size: 12359
+  train:
+    cmd: python code/models/train_model.py
+    deps:
+    - path: code/models/train_model.py
+      hash: md5
+      md5: fb4d684fb2ed467b010b32793fbde5e2
+      size: 3243
+    - path: data/processed/test.csv
+      hash: md5
+      md5: 90f129cf9f7ca359662c2040142a1dd6
+      size: 3159
+    - path: data/processed/train.csv
+      hash: md5
+      md5: f9e8553e9f8162b7ecf7d7ed1632af2f
+      size: 12359
+    outs:
+    - path: metrics/metrics.json
+      hash: md5
+      md5: 107f16cc5c6312c8495810d69935576e
+      size: 162
+    - path: models/penguins_model.joblib
+      hash: md5
+      md5: c678c4576f3582a337596adad4ce0735
+      size: 4003
+  deploy:
+    cmd: docker compose -f code/deployment/docker-compose.yml up -d --build
+    deps:
+    - path: code/deployment/api/Dockerfile
+      hash: md5
+      md5: 470cef8e7271206e29f0ab68f15c8e92
+      size: 413
+    - path: code/deployment/api/main.py
+      hash: md5
+      md5: 8ccec525ceb33d444b0e013ec616a571
+      size: 1385
+    - path: code/deployment/app/Dockerfile
+      hash: md5
+      md5: 2dc3ad14f30da18be181c4b65dcf741c
+      size: 259
+    - path: code/deployment/app/app.py
+      hash: md5
+      md5: f59ad1b6366e895df221bcc76e26de29
+      size: 1288
+    - path: code/deployment/docker-compose.yml
+      hash: md5
+      md5: 37acfe258b6ac5efafdd58d17e59d8c8
+      size: 359
+    - path: models/penguins_model.joblib
+      hash: md5
+      md5: c678c4576f3582a337596adad4ce0735
+      size: 4003

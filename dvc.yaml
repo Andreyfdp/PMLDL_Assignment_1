@@ -1,0 +1,31 @@
+stages:
+  prepare:
+    cmd: python code/datasets/prepare_data.py
+    deps:
+      - code/datasets/prepare_data.py
+      - data/raw/penguins.csv
+    outs:
+      - data/processed/train.csv
+      - data/processed/test.csv
+
+  train:
+    cmd: python code/models/train_model.py
+    deps:
+      - code/models/train_model.py
+      - data/processed/train.csv
+      - data/processed/test.csv
+    outs:
+      - models/penguins_model.joblib
+    metrics:
+      - metrics/metrics.json:
+          cache: false
+
+  deploy:
+    cmd: docker compose -f code/deployment/docker-compose.yml up -d --build
+    deps:
+      - models/penguins_model.joblib
+      - code/deployment/api/main.py
+      - code/deployment/api/Dockerfile
+      - code/deployment/app/app.py
+      - code/deployment/app/Dockerfile
+      - code/deployment/docker-compose.yml

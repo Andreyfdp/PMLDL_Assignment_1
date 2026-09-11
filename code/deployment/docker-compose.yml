@@ -1,0 +1,18 @@
+services:
+  api:
+    build:
+      context: ../..
+      dockerfile: code/deployment/api/Dockerfile
+    container_name: penguins-api
+    ports:
+      - "8000:8000"
+
+  app:
+    build:
+      context: ../..
+      dockerfile: code/deployment/app/Dockerfile
+    container_name: penguins-app
+    ports:
+      - "8501:8501"
+    depends_on:
+      - api
