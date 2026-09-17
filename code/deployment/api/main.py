@@ -12,7 +12,6 @@ MODEL_PATH = ROOT / "models" / "penguins_model.joblib"
 bundle = joblib.load(MODEL_PATH)
 
 model = bundle["model"]
-label_encoder = bundle["label_encoder"]
 
 
 app = FastAPI(
@@ -45,13 +44,7 @@ def predict(data: PenguinInput):
     prediction = model.predict(features)[0]
     probabilities = model.predict_proba(features)[0]
 
-    if label_encoder is not None:
-        prediction = label_encoder.inverse_transform(
-            [int(prediction)]
-        )[0]
-        classes = label_encoder.classes_
-    else:
-        classes = model.named_steps["classifier"].classes_
+    classes = model.named_steps["classifier"].classes_
 
     return {
         "prediction": str(prediction),

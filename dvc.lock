@@ -53,8 +53,8 @@ stages:
       size: 413
     - path: code/deployment/api/main.py
       hash: md5
-      md5: 8ccec525ceb33d444b0e013ec616a571
-      size: 1385
+      md5: fc8126e828fe820435cff2e8aa5a2edd
+      size: 1152
     - path: code/deployment/app/Dockerfile
       hash: md5
       md5: 2dc3ad14f30da18be181c4b65dcf741c
